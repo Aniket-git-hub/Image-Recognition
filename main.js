@@ -22,7 +22,7 @@ async function setup() {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true, muted: true })
     video.srcObject = stream
     video.play()
-    //take a picture when the space key is pressed and display the result
+    // take a picture on any click event
     window.addEventListener('keyup', async (e) => {
       console.log(e)
       if (e.key == 32) {
