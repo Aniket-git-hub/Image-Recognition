@@ -3,12 +3,14 @@ import './style.css'
 document.querySelector('#app').innerHTML = `
   <h1>Text Recognition</h1>
   <video width="400" height="300"></video>
-  <p>press <kbd>space</kbd> to take a picture</p>
+  <p>click on window to take picture</p> 
+  <button>Switch Camera</button>
   <pre id="result"></pre>
 `
 
 const video = document.querySelector('video')
 const result = document.querySelector('#result')
+
 
 import { createWorker } from 'tesseract.js'
 const worker = createWorker()
@@ -22,6 +24,7 @@ async function setup() {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true, muted: true })
     video.srcObject = stream
     video.play()
+
     // take a picture on any click event
     window.addEventListener('keyup', async (e) => {
       console.log(e)
