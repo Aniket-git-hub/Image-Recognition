@@ -11,17 +11,20 @@ const video = document.querySelector('video')
 const result = document.querySelector('#result')
 
 import { createWorker } from 'tesseract.js'
-const worker = createWorker({ logger: m => console.log(m) })
-  (async () => {
-    await worker.load()
-    await worker.loadLanguage('eng')
-    await worker.initialize('eng')
+const worker = createWorker()
+async function setup() {
+  await worker.load()
+  await worker.loadLanguage('eng')
+  await worker.initialize('eng')
 
+  //check if the browser has the camera
+  try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true, muted: true })
     video.srcObject = stream
     video.play()
-
-    window.addEventListener('keydown', async (e) => {
+    //take a picture when the space key is pressed and display the result
+    window.addEventListener('keyup', async (e) => {
+      console.log(e)
       if (e.key == 32) {
         const canvas = document.createElement('canvas')
         canvas.width = video.videoWidth
@@ -35,4 +38,8 @@ const worker = createWorker({ logger: m => console.log(m) })
       }
     })
 
-  })
+  } catch (err) {
+    alert('No camera detected')
+  }
+}
+setup()
