@@ -26,7 +26,7 @@ async function setup() {
     video.play()
 
     // take a picture on any click event
-    window.addEventListener('keyup', async (e) => {
+    window.addEventListener('click', async (e) => {
       console.log(e)
       if (e.key == 32) {
         const canvas = document.createElement('canvas')
@@ -38,6 +38,18 @@ async function setup() {
         const { data: { text } } = await worker.recognize(canvas)
         console.log(text)
         result.textContent = text
+
+        // Read the text from the image
+        let utterance = new SpeechSynthesisUtterance(text.replace(/\s+/g, ' '))
+        // Set the voice
+        utterance.voice = speechSynthesis.getVoices().filter(voice => voice.name === 'Google UK English(Enhanced)')[0]
+        // Set pitch and rate
+        utterance.rate = 0.7
+        // Set volume
+        utterance.volume = 2
+        // Queue this utterance
+        speechSynthesis.speak(utterance)
+
       }
     })
 
