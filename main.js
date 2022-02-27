@@ -26,35 +26,32 @@ async function setup() {
     video.play()
 
     // take a picture on any click event
-    window.addEventListener('click', async (e) => {
-      console.log(e)
-      if (e.key == 32) {
-        const canvas = document.createElement('canvas')
-        canvas.width = video.videoWidth
-        canvas.height = video.videoHeight
-        const ctx = canvas.getContext('2d')
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+    window.addEventListener('click', async () => {
+      const canvas = document.createElement('canvas')
+      canvas.width = video.videoWidth
+      canvas.height = video.videoHeight
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
 
-        const { data: { text } } = await worker.recognize(canvas)
-        console.log(text)
-        result.textContent = text
+      const { data: { text } } = await worker.recognize(canvas)
+      console.log(text)
+      result.textContent = text
 
-        // Read the text from the image
-        let utterance = new SpeechSynthesisUtterance(text.replace(/\s+/g, ' '))
-        // Set the voice
-        utterance.voice = speechSynthesis.getVoices().filter(voice => voice.name === 'Google UK English(Enhanced)')[0]
-        // Set pitch and rate
-        utterance.rate = 0.7
-        // Set volume
-        utterance.volume = 2
-        // Queue this utterance
-        speechSynthesis.speak(utterance)
-
-      }
+      // Read the text from the image
+      let utterance = new SpeechSynthesisUtterance(text.replace(/\s+/g, ' '))
+      // Set the voice
+      utterance.voice = speechSynthesis.getVoices().filter(voice => voice.name === 'Google UK English(Enhanced)')[0]
+      // Set pitch and rate
+      utterance.rate = 0.7
+      // Set volume
+      utterance.volume = 2
+      // Queue this utterance
+      speechSynthesis.speak(utterance)
     })
 
   } catch (err) {
     alert('No camera detected')
   }
+
 }
 setup()
